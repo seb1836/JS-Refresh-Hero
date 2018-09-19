@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Le jeu du pennaK</title>
+    <link rel="stylesheet" href="./assets/styles/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="app">
+            <h1>Le super JEU</h1>
+            <div class='main-container'>
+                <!-- TODO: use onclick attribute to trigger the play function in index.js
+                        You can check the onclick syntax at line 30
+                     -->
+                <div id='play' class='main-menu-btn' role="button" onclick="play();">JOUER</div>
+                <div id='game' class='game-container gone'>
+                    <div id='hero1' class='hero'>
+                        <div class='hero-name'>Hero1</div>
+                        <div class='hero-hp'><span>0</span> HP</div>
+                        <div class='hp-bar'></div>
+                        <div class='hero-mp'><span>0</span> MP</div>
+                        <div class='mp-bar'></div>
+                        <div class='stats'>
+                            <div class='attack'>10</div>
+                            <div class='defense'>5</div>
+                        </div>
+                        <div class='hero-image'><img src='./assets/images/warrior.png' alt='warrior' /></div>
+                        <div class='actions'>
+                            <div class='action' onclick="doAction('sword', hero1, hero2);">
+                                <img src='./assets/images/sword.png' alt='sword' />
+                                +10 attaque
+                            </div>
+                            <!-- TODO: doAction for axe -->
+                            <div class='action' onclick="doAction('axe', hero1, hero2);">
+                                <img src='./assets/images/axe.png' alt='axe' />
+                                +12 attaque
+                            </div>
+                            <!-- TODO: doAction for shield -->
+                            <div class='action' onclick="doAction('shield', hero1, hero2);">
+                                <img src='./assets/images/shield.png' alt='shield' />
+                                +5 défense
+                            </div>
+                        </div>
+                    </div>
+                    <div class='versus'>
+                        VS
+                    </div>
+                    <div id='hero2' class='hero'>
+                        <div class='hero-name'>Hero2</div>
+                        <div class='hero-hp'><span>0</span> HP</div>
+                        <div class='hp-bar'></div>
+                        <div class='hero-mp'><span>0</span> MP</div>
+                        <div class='mp-bar'></div>
+                        <div class='stats'>
+                            <div class='attack'>10</div>
+                            <div class='defense'>5</div>
+                        </div>
+                        <div class='hero-image'><img src='./assets/images/mage.png' alt='mage' /></div>
+                        <div class='actions'>
+                            <!-- TODO: doAction for fireball -->
+                            <div class='action' onclick="doAction('fireball', hero2, hero1);">
+                                <img src='./assets/images/fireball.png' alt='fireball' />
+                                +40 attaque -30 MP
+                            </div>
+                            <!-- TODO: doAction for frostbolt -->
+                            <div class='action' onclick="doAction('frostbolt', hero2, hero1);">
+                                <img src='./assets/images/frostbolt.png' alt='frostbolt' />
+                                +20 attaque -20 MP
+                            </div>
+                            <!-- TODO: doAction for mana potion -->
+                            <div class='action' onclick="doAction('mana', hero2, hero1);">
+                                <img src='./assets/images/mana.png' alt='mana' />
+                                +100 MP
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>
