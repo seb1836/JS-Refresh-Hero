@@ -1,248 +1,194 @@
-var game = {
-  init: false
-};
-
-// Weapons & spells
-var actions = [
+const warActions = [
   {
-    type: "weapon",
-    name: "sword",
-    label: "Epée",
-    attack: 10
+    name: 'sword',
+    attaque: 10,
+    manaCost: 0
   },
   {
-    type: "weapon",
-    name: "axe",
-    label: "Hache",
-    attack: 12
+    name: 'axe',
+    attaque: 15,
+    manaCost: 0
   },
   {
-    type: "weapon",
-    name: "shield",
-    label: "Bouclier",
-    attack: 0,
+    name: 'shield',
     defense: 5
+  }
+]
+
+const mageActions = [
+  {
+    name: 'fireBall',
+    attaque: 40,
+    manaCost: 30
   },
   {
-    type: "spell",
-    name: "fireball",
-    label: "Boule de feu",
-    attack: 40,
-    mana: 30
+    name: 'frostBolt',
+    attaque: 20,
+    manaCost: 20
   },
   {
-    type: "spell",
-    name: "frostbolt",
-    label: "Eclair de givre",
-    attack: 20,
-    mana: 20
-  },
-  {
-    type: "spell",
-    name: "mana",
-    label: "Potion de mana",
-    attack: 0,
+    name: 'mana',
     mana: 100
   }
-];
+]
 
-// Characters
-var heroes = [
+const heroes = [
   {
-    name: "Roger le guerrier ",
+    name: 'roger',
+    id: 'hero1',
     hp: 500,
-    maxHP: 500,
-    mp: 50,
-    maxMP: 50,
+    maxHp: 500,
+    mana: 0,
+    maxMana: 0,
+    attaque: 0,
     defense: 0,
-    attack: 10,
-    class: "warrior",
-    id: "hero1",
-    actions: []
+    actions: warActions
   },
+
   {
-    name: "Rapafro mage",
-    hp: 350,
-    maxHP: 350,
-    mp: 200,
-    maxMP: 200,
+    name: 'saoulliker',
+    id: 'hero2',
+    hp: 230,
+    maxHp: 230,
+    mana: 200,
+    maxMana: 200,
+    attaque: 0,
     defense: 0,
-    attack: 6,
-    class: "mage",
-    id: "hero2",
-    actions: []
+    actions: mageActions
   }
-];
+]
 
-// refresh one hero informations a faire
-var refreshHerohtml = function(heroElement, hero) {
-  // var herotab[]
-  //conditions d acces a while
-  // let i = 0;
-  //while (i< herotab)
-  console.log(heroElement, hero);
-
-  heroElement
-    .getElementsByClassName("hero-hp")[0]
-    .getElementsByTagName("span")[0].innerHTML = hero.hp + " HP";
-  heroElement
-    .getElementsByClassName("hero-mp")[0]
-    .getElementsByTagName("span")[0].innerHTML = hero.mp + " MP";
-  //heroElement =document.getElementsByClassName('hero-mp');  essai pour get element generique et faire maj
-  heroElement.getElementsByClassName("hp-bar")[0].style.width = `${(hero.hp *
-    100) /
-    hero.maxHP}%`;
-  //var memo = hero1.hp * 100 / hero1.maxHP
-  heroElement.getElementsByClassName("mp-bar")[0].style.width = `${(hero.mp *
-    100) /
-    hero.maxMP}%`;
-  heroElement.getElementsByClassName("attack")[0].innerHTML = hero.attack;
-  heroElement.getElementsByClassName("defense")[0].innerHTML = hero.defense;
-
-  console.log(hero);
-  console.log(heroElement);
-};
-
-// refresh the UI a faire récupérer refresh ele html
-var refresh = function() {
-  let i = 0;
-
-  while (i < heroes.length) {
-    refreshHerohtml(document.getElementById(heroes[i].id), heroes[i]);
-    i = i + 1;
-  }
-};
-
-// load the game
-var play = function() {
-  // display game content and hide play button
-  var gameContainer = document.getElementById("game");
-  gameContainer.className = "game-container";
-  var playButton = document.getElementById("play");
-  playButton.className = "play gone";
-
-  // init both heroes using the refresh function
-  refresh();
-};
-
-// check if attacker has enough mana
-var hasEnoughMana = function(attacker, manaCost) {
-  if (attacker.mp - manaCost < 0) {
-    alert("Pas assez de MP !");
-    return false;
-  }
-  return true;
-};
-
-// check if defender is dead
-var isDead = function(defender) {
-  if (defender.hp <= 0) {
-    var message = defender.name + " a perdu !";
-    alert(message);
-    return true;
-  }
-  return false;
-};
-
-// handle actions from onclick events optimisation
-var doAction = function(action, attacker, defender) {
-  /* DEBUG */
-  var debug = attacker.name + " uses " + action;
-  if (action !== "mana" && action !== "shield") {
-    debug += " on " + defender.name;
-  }
-  console.log(debug);
-  /* END DEBUG */
-
-  // TODO : reset attacker's defense at each turn
-  attacker.defense = 0;
-  defender.defense = 0;
-  // TODO : write the code for each action
-  //        => remove attacker's attack + action damage to defender's HP
-  //        => all the informations you need in the actions array (line 6)
-  if (action === "sword") {
-    defender.hp = defender.hp - actions[0].attack + defender.defense;
-    attacker.attack = actions[0].attack;
-  } else if (action === "axe") {
-    // insert code here
-    defender.hp = defender.hp - actions[1].attack + defender.defense;
-    attacker.attack = actions[1].attack;
-  } else if (action === "shield") {
-    // insert code here
-
-    defender.defense = actions[2].defense + defender.defense;
-    // Note : shield doesn't add attack but defense
-  } else if (action === "fireball") {
-    // insert code here
-    /* poser question sur comment obtenir value return*/
-    if (hasEnoughMana(attacker, actions[3].mana)) {
-      attacker.attack = actions[3].attack;
-      attacker.mp = attacker.mp - actions[3].mana;
-      defender.hp = defender.hp - actions[3].attack + defender.defense;
-      // Note : don't forget to check if attacker has enough mana to cast the spell with hasEnoughMana function
-    }
-  } else if (action === "frostbolt") {
-    // insert code here
-    if (hasEnoughMana(attacker, actions[4].mana)) {
-      attacker.mp = attacker.mp - actions[4].mana;
-      defender.hp = defender.hp - actions[4].attack + defender.defense;
-      attacker.attack = actions[4].attack;
-      // Note : don't forget to check if attacker has enough mana to cast the spell with hasEnoughMana function
-    }
-  } else if (action === "mana") {
-    // insert code here
-    if (attacker.mp <= 100) {
-      attacker.mp = actions[5].mana + attacker.mp;
-      // Note : don't forget to check if attacker MP won't be above maxMP after drinking the mana potion
-    } else {
-      alert("maximum dépassé");
+function heroIdentifier(id) {
+  return heroes.find(hero => id === hero.id)
+}
+/*for (i = 0; i < heroes.length; i++) {
+    if (id === heroes[i].id) {
+      return heroes[i];
     }
   }
+}*/
 
-  // check if the defender is dead to end the game
-  if (isDead(defender)) {
-    endGame();
-    return;
+function hasEnoughtMana(hero, actionMana) {
+  console.log(actionMana.manaCost)
+  if (hero.mana - actionMana.manaCost < 0) {
+    alert('pas assez de mana')
+    return false
+  } else {
+    return true
   }
+}
 
-  // refresh DOM once JS objects were updated
-  refresh();
-};
-
-// reset heroes data
-var resetData = function() {
-  let i = 0;
-  while (i < heroes.length) {
-    heroes[i].hp = heroes[i].maxHP;
-    heroes[i].mp = heroes[i].maxMP;
-    heroes[i++].defense = 0;
+function getAction(casterObj, spellName) {
+  return casterObj.actions.find(action => spellName === action.name)
+}
+/*for (let i = 0; i < casterObj.actions.length; i++) {
+    if (spellName === casterObj.actions[i].name) {
+      return casterObj.actions[i];
+    }
   }
-};
+}*/
 
-// end the game
-var endGame = function() {
-  game.init = false;
+function majData(action, casterObj, defenderObj) {
+  console.log('attak', casterObj.attaque)
+  const name = action.name === 'mana' || action.name === 'shield' ? action.name : 'normal'
+  window[`${name}Action`](action, casterObj, defenderObj)
 
-  // hide game content and display play button
-  var gameContainer = document.getElementById("game");
-  gameContainer.className = "game-container gone";
-  var playButton = document.getElementById("play");
-  playButton.className = "main-menu-btn visible";
+  console.log('123', casterObj)
+}
 
-  // Reset data for a new game
-  resetData();
-};
+function shieldAction(action, casterObj) {
+  // if (action.name === "shield") {
+  casterObj.defense = action.defense
+  // }
+}
+function manaAction(action, casterObj) {
+  // if (action.name === "mana") {
+  if (action.mana + casterObj.mana > casterObj.maxMana) {
+    alert('max reached')
+    casterObj.mana = casterObj.maxMana
+  } else {
+    casterObj.mana = casterObj.mana + action.mana
+  }
+  // }
+}
+function normalAction(action, casterObj, defenderObj) {
+  if (hasEnoughtMana(casterObj, action)) {
+    casterObj.mana = casterObj.mana - action.manaCost
+    casterObj.attaque = action.attaque
+    console.log('attaque after', casterObj.attaque)
+    defenderObj.hp = defenderObj.hp - casterObj.attaque + defenderObj.defense
+  }
+}
+function doAction(spellName, casterHTML, defenderHTML) {
+  console.log('html', casterHTML)
+  const casterObj = heroIdentifier(casterHTML.id)
+  const defenderObj = heroIdentifier(defenderHTML.id)
+  majData(getAction(casterObj, spellName), casterObj, defenderObj)
+  updateBar(casterObj, defenderObj, casterHTML, defenderHTML)
+  console.log('testattobj', casterObj)
+  console.log('testdefobj', defenderObj)
+  endgame(casterObj, defenderObj)
+}
 
-window.addEventListener("scroll", function() {
-  console.log("scroll");
-});
+function endgame(caster, defender) {
+  if (caster.hp <= 0) {
+    alert(caster.name + '' + ' a perdu')
+    //retour page a definir
+    document.getElementsByClassName('gone')[0].className = 'main-menu-btn'
+    document.getElementsByClassName('game-container')[0].classList.add('gone')
+    resetGame()
+  } else if (defender.hp <= 0) {
+    alert(defender.name + '' + ' a perdu')
+    //retour page a definir
+    document.getElementsByClassName('gone')[0].className = 'main-menu-btn'
+    document.getElementsByClassName('game-container')[0].classList.add('gone')
+    resetGame()
+  }
+}
 
-window.addEventListener("keypress", function() {
-  console.log("key pressed");
-});
+function resetGame() {
+  resetObject()
+  resethtml()
+}
 
-window.addEventListener("keydown", function(event) {
-  console.log(event.key);
-});
+function play() {
+  document.getElementsByClassName('main-menu-btn')[0].className = 'gone'
+  document.getElementsByClassName('game-container gone')[0].classList.remove('gone')
+  resetObject()
+  resethtml()
+  refreshHeroHtml()
+}
 
-//var b =hasenougthmana()
+function resetObject() {
+  heroes.forEach(hero => {
+    // for (let i = 0; i < heroes.length; i++) {
+
+    hero.hp = hero.maxHp
+    hero.mana = hero.maxMana
+  })
+}
+
+function resethtml() {
+  heroes.forEach(hero => {
+    //for (let i = 0; i < heroes.length; i++) {
+    const heroHTML = document.getElementById(hero.id)
+
+    heroHTML.getElementsByClassName('hero-hp')[0].innerHTML = hero.maxHp + 'HP'
+    heroHTML.getElementsByClassName('hero-mp')[0].innerHTML = hero.maxMana + 'MP'
+    heroHTML.getElementsByClassName('hp-bar')[0].style.width = '100%'
+    heroHTML.getElementsByClassName('mp-bar')[0].style.width = '100%'
+  })
+}
+function updateBar(casterObj, defenderObj, casterHTML, defenderHTML) {
+  defenderHTML.getElementsByClassName('hp-bar')[0].style.width = `${(100 * defenderObj.hp) / defenderObj.maxHp}%`
+  casterHTML.getElementsByClassName('mp-bar')[0].style.width = `${(100 * casterObj.mana) / casterObj.maxMana}%`
+  console.log('testfdfsd----------------------------------', casterObj, defenderObj)
+  refreshHeroHtml()
+}
+
+function refreshHeroHtml() {
+  heroes.forEach(hero => {
+    document.getElementById(hero.id).getElementsByClassName('hero-hp')[0].innerHTML = hero.hp + 'HP'
+    document.getElementById(hero.id).getElementsByClassName('hero-mp')[0].innerHTML = hero.mana + 'MP'
+  })
+}
